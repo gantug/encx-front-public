@@ -1,11 +1,11 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import axios, { post } from "axios";
 import { useState } from "react";
 
 export default function FileUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+  const [response, setResponse] = useState(null);
 
   const onClick = (event) => {
     event.preventDefault();
@@ -14,23 +14,22 @@ export default function FileUpload() {
 
     formData.append("myfile", selectedFile);
 
-    axios({
-      url: "http://localhost:3000/api/files",
-      data: { formData },
-      method: "post",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).then((res) => {
-      console.log(res);
-    });
-    console.log("hello", event);
+    let request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200)
+      {
+        console.log(JSON.parse(this.responseText))
+        setResponse(JSON.parse(this.responseText))
+
+      }
+    }
+    request.open('POST', 'http://164.68.127.240:3000/api/files');
+    request.send(formData);
   };
 
   const changeHandler = (event) => {
     event.preventDefault();
 
-    console.log(event);
     setSelectedFile(event.target.files[0]);
     setIsSelected(true);
   };
@@ -51,6 +50,11 @@ export default function FileUpload() {
     }
     return filename.split(".").pop();
   };
+
+  const copyLink = () => {
+    if (response)
+      navigator.clipboard.writeText(response.file)
+  }
 
   const fileSelected = () => {
     if (isSelected === false) {
@@ -77,6 +81,12 @@ export default function FileUpload() {
               <div>{getFileType(selectedFile.name)}</div>
             </div>
           </div>
+          {response ? (
+            <div className="upload-button" onClick={copyLink}>
+              Copy Link
+            </div>
+          ) : ''}
+          <br/>
           <div className="upload-button" onClick={onClick}>
             Upload
           </div>
