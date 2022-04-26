@@ -697,7 +697,36 @@ a#left-tabs-example-tab-first{
     }
 }
 
-
 .no-padding{
     padding: 0 !important;
 }
+
+.selected-file{
+    color: white;
+    h1{
+        color: white;
+        font-family: 'Roboto';
+        font-size: 24px;
+    }
+    .file-details{
+        display: flex;
+        justify-content: center;
+        margin: 16px 0;
+        div {
+            margin: 0px 10px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+    }
+}
+
+.upload-button{
+    padding: 8px 16px;
+    color: black;
+    background-color: #0070f3;
+    border-radius: 2px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    cursor: pointer;
+}
+
